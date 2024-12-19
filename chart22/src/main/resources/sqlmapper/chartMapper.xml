@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.example.demo.mapper.ChartMapper">
+<!-- 	<select id="selectChartList" resultType="map">
+			SELECT 	
+				MATERIAL_ID
+				, SAMPLING_POINT_ID
+				, SUBMISSION_ID
+				, SAMPLE_ID
+				, SAMPLING_TYPE_ID
+				, SAMPLING_DATETIME
+				, SPEC_ID
+			FROM SLT_SAMPLE
+			WHERE MATERIAL_ID = '4'
+			AND SAMPLING_POINT_ID = '6167'
+			AND  SAMPLING_DATETIME BETWEEN '2023-01-12' AND '2024-01-01'
+	</select>
+	
+	<insert id="insert"></insert>
+	<update id="update"></update>
+ 	<delete id="delete"></delete>
+ 	<select id="get" resultType="board"></select>						
+ 	<select id="get" resultMap="boardResult"></select>
+</mapper> -->
+<select id="selectChartList" resultType="map">
+		/* com.example.demo.mapper.ChartMapper */
+		
+		 SELECT 
+		 	CHART_ID
+		 	, CONVERT(CHAR(10), SAMPLE_DATE,23) AS DATE
+		 	, MIN
+		 	, MAX
+		 	, R
+		 	, SAMPLE
+		 	, AVG
+		 	, STD
+		 	, AVG3SM
+		 	, AVG3SP
+		 	, CP
+		 	, CPK
+		  FROM SLT_TEMP_CHART
+		  WHERE 1=1
+		  <if test = "fromDate != null">  
+		  AND SAMPLE_DATE BETWEEN #{fromDate} AND #{toDate}
+  		  </if>
+ </select>
+ 
+ 
+ 
+ <select id="selectPlant" resultType="map">
+		/* com.example.demo.mapper.selectPlant */
+		
+		 SELECT DISTINCT
+				   ATTRIBUTE_VALUE_ID ID
+				   , ATTRIBUTE_VALUE_NAME NAME
+		 FROM
+				   SLT_USER_USER_PLANT UPLANT
+				   INNER JOIN SLT_ATTRIBUTE_VALUE ATTR 
+				   ON (UPLANT.USER_PLANT_ID = ATTR.ATTRIBUTE_VALUE_ID)
+ </select>
+ 
+ 
+  <select id="selectMaterial" resultType="map">
+		/* com.example.demo.mapper.selectMaterial */
+		
+		SELECT DISTINCT MATERIAL_ID ID
+			, MATERIAL_NAME NAME
+			FROM SLV_SQC_QUERY 
+			WHERE 1=1
+			<if test = "plantId != null">  
+			AND PLANT_ID = #{plantId}
+	  		</if>
+			ORDER BY MATERIAL_NAME ASC
+ </select>
+
+ 
+ 
+</mapper>
+
+
